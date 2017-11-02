@@ -30,7 +30,7 @@ if sys.platform == 'darwin':
       proc = subprocess.Popen(
           ['xcodebuild', '-version', '-sdk', 'macosx' + sdk, 'Path'],
           stdout=subprocess.PIPE, stderr=DEVNULL)
-      return proc.communicate()[0].rstrip('\n')
+      return proc.communicate()[0].decode().rstrip('\n')
     finally:
       DEVNULL.close()
 

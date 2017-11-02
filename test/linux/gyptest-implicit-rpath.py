@@ -26,7 +26,7 @@ if sys.platform.startswith('linux'):
     r = re.compile(r'Library rpath: \[([^\]]+)\]')
     proc = subprocess.Popen(['readelf', '-d', p], stdout=subprocess.PIPE,
         universal_newlines=True)
-    o = proc.communicate()[0]
+    o = proc.communicate()[0].decode()
     assert not proc.returncode
     return r.findall(o)
 

@@ -32,7 +32,7 @@ if sys.platform == 'darwin':
     p = test.built_file_path(p, chdir=CHDIR)
     r = re.compile(r'cmd LC_ID_DYLIB.*?name (.*?) \(offset \d+\)', re.DOTALL)
     proc = subprocess.Popen(['otool', '-l', p], stdout=subprocess.PIPE)
-    o = proc.communicate()[0]
+    o = proc.communicate()[0].decode()
     assert not proc.returncode
     m = r.search(o)
     assert m

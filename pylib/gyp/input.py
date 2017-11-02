@@ -901,6 +901,8 @@ def ExpandVariables(input, phase, variables, build_file):
                            (e, contents, build_file))
 
           p_stdout, p_stderr = p.communicate('')
+          p_stdout = p_stdout.decode()
+          p_stderr = p_stderr.decode()
 
           if p.wait() != 0 or p_stderr:
             sys.stderr.write(p_stderr)

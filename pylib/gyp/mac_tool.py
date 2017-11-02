@@ -269,6 +269,7 @@ class MacTool(object):
     env['ZERO_AR_DATE'] = '1'
     libtoolout = subprocess.Popen(cmd_list, stderr=subprocess.PIPE, env=env)
     _, err = libtoolout.communicate()
+    err = err.decode()
     for line in err.splitlines():
       if not libtool_re.match(line) and not libtool_re5.match(line):
         print(line, file=sys.stderr)

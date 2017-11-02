@@ -137,7 +137,7 @@ def _FindDirectXInstallation():
     # Setup params to pass to and attempt to launch reg.exe.
     cmd = ['reg.exe', 'query', r'HKLM\Software\Microsoft\DirectX', '/s']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    for line in p.communicate()[0].splitlines():
+    for line in p.communicate()[0].decode().splitlines():
       if 'InstallPath' in line:
         dxsdk_dir = line.split('    ')[3] + "\\"
 
@@ -319,7 +319,7 @@ class MsvsSettings(object):
     # first level is globally for the configuration (this is what we consider
     # "the" config at the gyp level, which will be something like 'Debug' or
     # 'Release'), VS2015 and later only use this level
-    if self.vs_version.short_name >= 2015:
+    if int(self.vs_version.short_name) >= 2015:
       return config
     # and a second target-specific configuration, which is an
     # override for the global one. |config| is remapped here to take into
@@ -483,7 +483,7 @@ class MsvsSettings(object):
         prefix='/arch:')
     cflags.extend(['/FI' + f for f in self._Setting(
         ('VCCLCompilerTool', 'ForcedIncludeFiles'), config, default=[])])
-    if self.vs_version.project_version >= 12.0:
+    if float(self.vs_version.project_version) >= 12.0:
       # New flag introduced in VS2013 (project version 12.0) Forces writes to
       # the program database (PDB) to be serialized through MSPDBSRV.EXE.
       # https://msdn.microsoft.com/en-us/library/dn502518.aspx
@@ -1050,6 +1050,7 @@ def GenerateEnvironmentFiles(toplevel_build_dir, generator_flags,
     popen = subprocess.Popen(
         args, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     variables, _ = popen.communicate()
+    variables = variables.decode()
     if popen.returncode != 0:
       raise Exception('"%s" failed with error %d' % (args, popen.returncode))
     env = _ExtractImportantEnvironment(variables)
@@ -1071,6 +1072,7 @@ def GenerateEnvironmentFiles(toplevel_build_dir, generator_flags,
       'for', '%i', 'in', '(cl.exe)', 'do', '@echo', 'LOC:%~$PATH:i'))
     popen = subprocess.Popen(args, shell=True, stdout=subprocess.PIPE)
     output, _ = popen.communicate()
+    output = output.decode()
     cl_paths[arch] = _ExtractCLPath(output)
   return cl_paths
 

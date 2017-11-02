@@ -21,7 +21,7 @@ import TestMac
 
 def CheckFileType(file, expected):
   proc = subprocess.Popen(['lipo', '-info', file], stdout=subprocess.PIPE)
-  o = proc.communicate()[0].strip()
+  o = proc.communicate()[0].decode().strip()
   assert not proc.returncode
   if not expected in o:
     print('File: Expected %s, got %s' % (expected, o))
@@ -32,11 +32,11 @@ def HasCerts():
   # certs available.
   proc = subprocess.Popen(['security','find-identity','-p', 'codesigning',
                            '-v'], stdout=subprocess.PIPE)
-  return "0 valid identities found" not in proc.communicate()[0].strip()
+  return "0 valid identities found" not in proc.communicate()[0].decode().strip()
 
 def CheckSignature(file):
   proc = subprocess.Popen(['codesign', '-v', file], stdout=subprocess.PIPE)
-  o = proc.communicate()[0].strip()
+  o = proc.communicate()[0].decode().strip()
   assert not proc.returncode
   if "code object is not signed at all" in o:
     print('File %s not properly signed.' % (file))
@@ -46,7 +46,7 @@ def CheckEntitlements(file, expected_entitlements):
   with tempfile.NamedTemporaryFile() as temp:
     proc = subprocess.Popen(['codesign', '--display', '--entitlements',
                              temp.name, file], stdout=subprocess.PIPE)
-    o = proc.communicate()[0].strip()
+    o = proc.communicate()[0].decode().strip()
     assert not proc.returncode
     data = temp.read()
   entitlements = ParseEntitlements(data)
@@ -68,12 +68,12 @@ def ParseEntitlements(data):
 def GetXcodeVersionValue(type):
   args = ['xcodebuild', '-version', '-sdk', 'iphoneos', type]
   job = subprocess.Popen(args, stdout=subprocess.PIPE)
-  return job.communicate()[0].strip()
+  return job.communicate()[0].decode().strip()
 
 def GetMachineBuild():
   args = ['sw_vers', '-buildVersion']
   job = subprocess.Popen(args, stdout=subprocess.PIPE)
-  return job.communicate()[0].strip()
+  return job.communicate()[0].decode().strip()
 
 def CheckPlistvalue(plist, key, expected):
   if key not in plist:

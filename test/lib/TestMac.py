@@ -17,7 +17,7 @@ __all__ = ['Xcode', 'CheckFileType']
 def CheckFileType(test, file, archs):
   """Check that |file| contains exactly |archs| or fails |test|."""
   proc = subprocess.Popen(['lipo', '-info', file], stdout=subprocess.PIPE)
-  o = proc.communicate()[0].strip()
+  o = proc.communicate()[0].decode().strip()
   assert not proc.returncode
   if len(archs) == 1:
     pattern = re.compile('^Non-fat file: (.*) is architecture: (.*)$')

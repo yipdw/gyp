@@ -97,6 +97,7 @@ def GetAllIncludeDirectories(target_list, target_dicts,
     proc = subprocess.Popen(args=command, stdin=subprocess.PIPE,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output = proc.communicate()[1]
+    output = output.decode()
     # Extract the list of include dirs from the output, which has this format:
     #   ...
     #   #include "..." search starts here:
@@ -234,6 +235,7 @@ def GetAllDefines(target_list, target_dicts, data, config_name, params,
     cpp_proc = subprocess.Popen(args=command, cwd='.',
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     cpp_output = cpp_proc.communicate()[0]
+    cpp_output = cpp_output.decode()
     cpp_lines = cpp_output.split('\n')
     for cpp_line in cpp_lines:
       if not cpp_line.strip():

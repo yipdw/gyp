@@ -117,6 +117,7 @@ def _GetDomainAndUserName():
       call = subprocess.Popen(['net', 'config', 'Workstation'],
                               stdout=subprocess.PIPE)
       config = call.communicate()[0]
+      config = config.decode()
       username_re = re.compile(r'^User name\s+(\S+)', re.MULTILINE)
       username_match = username_re.search(config)
       if username_match:

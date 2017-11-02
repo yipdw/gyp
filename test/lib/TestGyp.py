@@ -646,7 +646,7 @@ def ConvertToCygpath(path):
   """Convert to cygwin path if we are using cygwin."""
   if sys.platform == 'cygwin':
     p = subprocess.Popen(['cygpath', path], stdout=subprocess.PIPE)
-    path = p.communicate()[0].strip()
+    path = p.communicate()[0].decode().strip()
   return path
 
 
@@ -827,7 +827,7 @@ class TestGypOnMSToolchain(TestGypBase):
     arguments = [cmd, '/c', self.vsvars_path, '&&', 'dumpbin']
     arguments.extend(dumpbin_args)
     proc = subprocess.Popen(arguments, stdout=subprocess.PIPE)
-    output = proc.communicate()[0]
+    output = proc.communicate()[0].decode()
     assert not proc.returncode
     return output
 

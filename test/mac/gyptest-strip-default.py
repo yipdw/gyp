@@ -34,7 +34,7 @@ if sys.platform == 'darwin':
 
   def CheckNsyms(p, o_expected):
     proc = subprocess.Popen(['nm', '-aU', p], stdout=subprocess.PIPE)
-    o = proc.communicate()[0]
+    o = proc.communicate()[0].decode()
 
     # Filter out mysterious "00 0000   OPT radr://5614542" symbol which
     # is apparently only printed on the bots (older toolchain?).

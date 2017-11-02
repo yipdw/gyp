@@ -40,6 +40,8 @@ if sys.platform == 'darwin':
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT)
   out, err = job.communicate()
+  out = out.decode()
+  err = err.decode()
   if job.returncode != 0:
     print(out)
     raise Exception('Error %d running xcodebuild' % job.returncode)

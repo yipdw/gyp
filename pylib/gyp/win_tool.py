@@ -132,6 +132,7 @@ class WinTool(object):
     link = subprocess.Popen(args, shell=sys.platform == 'win32', env=env,
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out, _ = link.communicate()
+    out = out.decode()
     for line in out.splitlines():
       if (not line.startswith('   Creating library ') and
           not line.startswith('Generating code') and
@@ -197,8 +198,10 @@ class WinTool(object):
       # and sometimes doesn't unfortunately.
       with open(our_manifest, 'r') as our_f:
         with open(assert_manifest, 'r') as assert_f:
-          our_data = our_f.read().translate(None, string.whitespace)
-          assert_data = assert_f.read().translate(None, string.whitespace)
+          our_data = our_f.read()
+          assert_data = assert_f.read()
+          our_data = re.sub('\s+', '', our_data)
+          assert_data = re.sub('\s+', '',assert_data)
       if our_data != assert_data:
         os.unlink(out)
         def dump(filename):
@@ -225,6 +228,7 @@ class WinTool(object):
     popen = subprocess.Popen(args, shell=True, env=env,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out, _ = popen.communicate()
+    out = out.decode()
     for line in out.splitlines():
       if line and 'manifest authoring warning 81010002' not in line:
         print(line)
@@ -257,6 +261,7 @@ class WinTool(object):
     popen = subprocess.Popen(args, shell=True, env=env,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out, _ = popen.communicate()
+    out = out.decode()
     # Filter junk out of stdout, and write filtered versions. Output we want
     # to filter is pairs of lines that look like this:
     # Processing C:\Program Files (x86)\Microsoft SDKs\...\include\objidl.idl
@@ -276,6 +281,7 @@ class WinTool(object):
     popen = subprocess.Popen(args, shell=True, env=env,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out, _ = popen.communicate()
+    out = out.decode()
     for line in out.splitlines():
       if (not line.startswith('Copyright (C) Microsoft Corporation') and
           not line.startswith('Microsoft (R) Macro Assembler') and
@@ -291,6 +297,7 @@ class WinTool(object):
     popen = subprocess.Popen(args, shell=True, env=env,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out, _ = popen.communicate()
+    out = out.decode()
     for line in out.splitlines():
       if (not line.startswith('Microsoft (R) Windows (R) Resource Compiler') and
           not line.startswith('Copyright (C) Microsoft Corporation') and

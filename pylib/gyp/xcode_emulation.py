@@ -1449,6 +1449,7 @@ def GetStdout(cmdlist):
   Raises |GypError| if the command return with a non-zero return code."""
   job = subprocess.Popen(cmdlist, stdout=subprocess.PIPE)
   out = job.communicate()[0]
+  out = out.decode()
   if job.returncode != 0:
     sys.stderr.write(out + '\n')
     raise GypError('Error %d running %s' % (job.returncode, cmdlist[0]))

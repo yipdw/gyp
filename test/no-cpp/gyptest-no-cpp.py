@@ -32,7 +32,7 @@ if (sys.platform != 'win32' and
     else:
       proc = subprocess.Popen(['ldd', path], stdout=subprocess.PIPE,
           universal_newlines=True)
-    output = proc.communicate()[0]
+    output = proc.communicate()[0].decode()
     assert not proc.returncode
     return 'libstdc++' in output or 'libc++' in output
 

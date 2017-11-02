@@ -19,7 +19,7 @@ def HasCerts():
   # certs available.
   proc = subprocess.Popen(['security','find-identity','-p', 'codesigning',
                            '-v'], stdout=subprocess.PIPE)
-  return "0 valid identities found" not in proc.communicate()[0].strip()
+  return "0 valid identities found" not in proc.communicate()[0].decode().strip()
 
 if sys.platform == "darwin":
   # This test appears to be flaky and hangs some of the time.
