@@ -50,7 +50,8 @@ def MakeGuid(name, seed='msvs_new'):
   not change when the project for a target is rebuilt.
   """
   # Calculate a MD5 signature for the seed and name.
-  d = _new_md5(str(seed) + str(name)).hexdigest().upper()
+  name = str(seed) + str(name)
+  d = _new_md5(name.encode()).hexdigest().upper()
   # Convert most of the signature to GUID form (discard the rest)
   guid = ('{' + d[:8] + '-' + d[8:12] + '-' + d[12:16] + '-' + d[16:20]
           + '-' + d[20:32] + '}')
@@ -78,6 +79,9 @@ class MSVSSolutionEntry(object):
 
   def __ne__(self, other):
     return (self.name, self.get_guid()) != (other.name, other.get_guid())
+
+  def __hash__(self):
+    return hash((self.name, self.get_guid()))
 
 
 class MSVSFolder(MSVSSolutionEntry):
