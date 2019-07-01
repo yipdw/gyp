@@ -261,6 +261,16 @@ def _CreateVersion(name, path, sdk_based=False):
   if path:
     path = os.path.normpath(path)
   versions = {
+      '2019': VisualStudioVersion('2019',
+                                  'Visual Studio 2019',
+                                  solution_version='12.00',
+                                  project_version='15.0',
+                                  flat_sln=False,
+                                  uses_vcxproj=True,
+                                  path=path,
+                                  sdk_based=sdk_based,
+                                  default_toolset='v142',
+                                  compatible_sdks=['v8.1', 'v10.0']),
       '2017': VisualStudioVersion('2017',
                                   'Visual Studio 2017',
                                   solution_version='12.00',
@@ -391,6 +401,7 @@ def _DetectVisualStudioVersions(versions_to_check, force_express):
       2013(e) - Visual Studio 2013 (12)
       2015    - Visual Studio 2015 (14)
       2017    - Visual Studio 2017 (15)
+      2019    - Visual Studio 2019 (16)
     Where (e) is e for express editions of MSVS and blank otherwise.
   """
   version_to_year = {
@@ -400,7 +411,8 @@ def _DetectVisualStudioVersions(versions_to_check, force_express):
       '11.0': '2012',
       '12.0': '2013',
       '14.0': '2015',
-      '15.0': '2017'
+      '15.0': '2017',
+      '16.0': '2019',
   }
   versions = []
   for version in versions_to_check:
@@ -474,6 +486,7 @@ def SelectVisualStudioVersion(version='auto', allow_fallback=True):
     '2013e': ('12.0',),
     '2015': ('14.0',),
     '2017': ('15.0',),
+    '2019': ('16.0',),
   }
   override_path = os.environ.get('GYP_MSVS_OVERRIDE_PATH')
   if override_path:
